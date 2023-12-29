@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
     portno = atoi(argv[1]);
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     serv_addr.sin_port = htons(portno);
 
     if(bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0){
@@ -48,8 +48,9 @@ int main(int argc, char* argv[]){
         error("Error: Failed to accept connection.\n");
     }
 
+    printf("New connection established with client.\n");
+    
     while(1){
-        printf("Client1: \n");
         bzero(buffer, 255);
         n = read(newsockfd, buffer, 255);
 

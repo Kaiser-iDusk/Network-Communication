@@ -41,15 +41,17 @@ int main(int argc, char* argv[]){
     
     bzero((char *) &serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    bcopy((char *) server->h_name, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
+    //bcopy((char *) server->h_name, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
+    serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
     serv_addr.sin_port = htons(portno);
 
-    if(connect(sockfd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0){
+    if(connect(sockfd, (struct sockaddr*) &serv_addr, (socklen_t) sizeof(serv_addr)) < 0){
         error("Error: Connection to host has failed.\n");
     }
 
+    printf("Connection Successful...\n");
+    
     while(1){
-        printf("Clearing buffer...\n");
         bzero(buffer, 255);
         fgets(buffer, 255, stdin);
         n = write(sockfd, buffer, strlen(buffer));
